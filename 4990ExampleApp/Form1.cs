@@ -13,19 +13,53 @@ namespace _4990ExampleApp
 {
     public partial class Form1 : Form
     {
+        //this.Size = new
         List < Panel > listPanel = new List < Panel > ();
         int Index;
         private BindingSource dfSource = new BindingSource();
+        public void set_size()
+        {
+            this.Size = new Size(658, 615);
+        }
+        //Form1.ActiveForm;
+        //this.ClientSize = new Size(658, 615);
+        //Form.ControlCollection.Cl
+        //Form mainForm = Application.OpenForms["Form1"];
+        //Form mainForm = Application.OpenForms[0];
+        //MessageBox.Show("mainForm: "+mainForm.ToString());
+        //Form1_Load();
+        //set_size();
         public Form1()
         {
+            //this.Size = new Size(658, 615);
             InitializeComponent();
+            //Form1_Load();
+            set_size();
+            signInPanel.Location = new Point(45, 36);
+            appPanel.Location = new Point(45, 36);
+            newAccountPanel.Location = new Point(45, 36);
             set_initial_status();
             listPanel.Add(signInPanel);
             listPanel.Add(appPanel);
+            //listPanel.Add(newAccountPanel);
         }
+        private void Form1_Load()
+        {
+            //mainForm = Form1.ActiveForm;
+            //mainForm = Application.OpenForms["Form1"];
+        }
+        //public void set_size()
+        //{
+        //    //mainForm = Application.OpenForms[0];
+        //    Form mainForm = Form1.ActiveForm;
+        //    MessageBox.Show("Val of mainForm: " + mainForm.ToString());
+        //    //mainForm.Size = new Size(658, 615);
+        //    mainForm.MaximizeBox = false;
+        //    mainForm.Size = new Size(658, 615);
+        //}
         public void set_initial_status()
         {
-
+            
             bool Testing = true;
             goodOrBad.Checked = false;
             if (Testing)
@@ -42,6 +76,8 @@ namespace _4990ExampleApp
             //signInPanel.Show();
             //appPanel.Hide();
             appPanel.SendToBack();
+            //newAccountPanel.Visible = false;
+            newAccountPanel.SendToBack();
             userInfoGrid.DataSource = String.Empty;
         }
 
@@ -248,5 +284,182 @@ namespace _4990ExampleApp
         {
 
         }
+        private void set_newAccound_name_blank()
+        {
+            newAccountName.Text = "";
+        }
+        private void set_newAccount_passwords_blank()
+        {
+            newAccountPassword.Text = "";
+            newAccountPasswordConfirm.Text = "";
+        }
+        private void goto_newAccount()
+        {
+            set_newAccound_name_blank();
+            set_newAccount_passwords_blank();
+            for (int i = 0; i < listPanel.Count; i++)
+                listPanel[i].SendToBack();
+            newAccountPanel.Visible = true;
+            newAccountPanel.BringToFront();
+        }
+        private void button3_Click(object sender, EventArgs e)
+        {
+            goto_newAccount();
+        }
+        private bool new_user_name(string newName)
+        {
+            string dbPath = System.IO.Path.Combine(
+                        AppDomain.CurrentDomain.BaseDirectory,
+                        "ExampleDB.accdb");
+
+            string strDsn = String.Format(
+                       "Provider=Microsoft.ACE.OLEDB.12.0; Data Source={0}",
+                       dbPath);
+            DataSet users = new DataSet();
+            string strSql = "SELECT UserName FROM Users";// WHERE Users.[UserName] = '" + userName + "' AND Users.[Password] ='" + password + "'";
+            OleDbConnection conn = new OleDbConnection(strDsn);
+            conn.Open();
+            using (OleDbCommand command = new OleDbCommand(strSql, conn))
+            using (OleDbDataAdapter adapter = new OleDbDataAdapter(command))
+            {
+                adapter.Fill(users);
+                conn.Close();
+            }
+            DataRow[] foundRows;
+            foundRows = users.Tables["Users"].Select("UserName = " + newName);
+            MessageBox.Show("Found rows:\n" + foundRows.ToString());
+            if(foundRows.Count()>0)
+            {
+                MessageBox.Show("Username (" + newName + ") is already taken.\nPlease select a different name");
+                set_newAccound_name_blank();
+                return false;
+            }
+            return true;
+        }
+        private bool newAccount_passwords_match(string password1,string password2)
+        {
+            if (password1 == password2)
+                return true;
+            else
+            {
+                MessageBox.Show("Passwords do not match.\nLet's try again.");
+                set_newAccount_passwords_blank();
+                return false;
+            }
+        }
+        private void button2_Click(object sender, EventArgs e)
+        {
+            if (all_fields_filled() == false)
+                return;
+            if((newAccount_passwords_match(newAccountPassword.Text, newAccountPasswordConfirm.Text) == false) |
+                (new_user_name(newAccountName.Text) == false))
+            {
+                return;
+            }
+            else
+            {
+                MessageBox.Show("New User will be added to db...\nOnce i write that function.");
+                set_initial_status();
+                return;
+            }
+        }
+        private bool all_fields_filled()
+        {
+            List<object> newAccountItems = new List<object>();
+            newAccountItems.Add(newFirstName);
+            newAccountItems.Add(newLastName);
+            //newAccountItems.Add(newSsn);
+            newAccountItems.Add(newAccountName);
+            newAccountItems.Add(newAccountPassword);
+            newAccountItems.Add(newAccountPasswordConfirm);
+            string enteredSsn = newSsn.ToString();
+            for (int i = 0;i<enteredSsn.Length;i++)
+            {
+                if (enteredSsn[i] == '_')
+                {
+                    MessageBox.Show("Social Security Number Field invalid.");
+                    return false;
+                }
+            }
+            for (int i = 0; i < newAccountItems.Count; i++)
+            {
+                if ((newAccountItems[i].ToString() == "") | (String.IsNullOrEmpty(newAccountItems[i].ToString())))
+                {
+                    MessageBox.Show("Required Textbox Field Missing");
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        
+        private void create_new_account()
+        {
+            return;
+        }
+        private void returnToMainFromNewAccount_Click(object sender, EventArgs e)
+        {
+            set_initial_status();
+        }
+        private void label12_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label10_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void textBox2_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label11_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void textBox1_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void textBox3_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void newAccountPanel_Paint(object sender, PaintEventArgs e)
+        {
+
+        }
+
+        private void returnToMainFromNewAccount_Click_1(object sender, EventArgs e)
+        {
+            //MessageBox.Show("ssn: " + newSsn.TextLength.ToString());
+            set_newAccound_name_blank();
+            set_newAccount_passwords_blank();
+            set_initial_status();
+        }
+
+        private void createAccount_Click(object sender, EventArgs e)
+        {
+            if (all_fields_filled() == false)
+                return;
+            if ((newAccount_passwords_match(newAccountPassword.Text, newAccountPasswordConfirm.Text) == false) |
+                (new_user_name(newAccountName.Text) == false))
+            {
+                return;
+            }
+            else
+            {
+                MessageBox.Show("New User will be added to db...\nOnce i write that function.");
+                set_initial_status();
+                return;
+            }
+        }
     }
+
 }

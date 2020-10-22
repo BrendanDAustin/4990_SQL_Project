@@ -14,9 +14,13 @@ namespace _4990ExampleApp
         [STAThread]
         static void Main()
         {
+            
+            //form1.MaximizeBox = false;
+            //form1.Size = new Size(658, 615);
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new Form1());
+            Form form1 = new Form1();
+            Application.Run(form1);
         }
     }
 }
