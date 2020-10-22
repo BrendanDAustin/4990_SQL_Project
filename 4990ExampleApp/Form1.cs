@@ -59,7 +59,7 @@ namespace _4990ExampleApp
         //}
         public void set_initial_status()
         {
-            MessageBox.Show("This app has been updated via github");
+            MessageBox.Show("This app has been updated via github AGAIN");
             bool Testing = true;
             goodOrBad.Checked = false;
             if (Testing)
