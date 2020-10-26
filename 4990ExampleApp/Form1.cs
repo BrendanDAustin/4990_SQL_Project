@@ -49,7 +49,7 @@ namespace _4990ExampleApp
             appPanel.SendToBack();
             newAccountPanel.SendToBack();
             userInfoGrid.DataSource = String.Empty;
-            //MessageBox.Show("Updated... Heres a box, boy");
+            MessageBox.Show("Updated... Heres a box, boy");
         }
 
         private bool bare_minimum_validation_lol(string name,string password)

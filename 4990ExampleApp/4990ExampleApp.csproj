@@ -23,11 +23,11 @@
     <UpdatePeriodically>false</UpdatePeriodically>
     <UpdateRequired>false</UpdateRequired>
     <MapFileExtensions>true</MapFileExtensions>
-    <InstallUrl>https://raw.githubusercontent.com/BrendanDAustin/4990_SQL_Project/master/4990ExampleApp/4990ExampleApp.csproj/</InstallUrl>
+    <InstallUrl>https://raw.githubusercontent.com/BrendanDAustin/4990_SQL_Project/Publish/4990ExampleApp/4990ExampleApp.application/</InstallUrl>
     <UpdateUrl>https://github.com/BrendanDAustin/4990_SQL_Project/find/master/</UpdateUrl>
     <CreateWebPageOnPublish>true</CreateWebPageOnPublish>
     <WebPage>publish.htm</WebPage>
-    <ApplicationRevision>6</ApplicationRevision>
+    <ApplicationRevision>9</ApplicationRevision>
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <PublishWizardCompleted>true</PublishWizardCompleted>
