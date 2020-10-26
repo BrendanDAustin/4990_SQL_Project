@@ -13,7 +13,6 @@ namespace _4990ExampleApp
 {
     public partial class Form1 : Form
     {
-        //this.Size = new
         List < Panel > listPanel = new List < Panel > ();
         int Index;
         private BindingSource dfSource = new BindingSource();
@@ -21,19 +20,9 @@ namespace _4990ExampleApp
         {
             this.Size = new Size(658, 615);
         }
-        //Form1.ActiveForm;
-        //this.ClientSize = new Size(658, 615);
-        //Form.ControlCollection.Cl
-        //Form mainForm = Application.OpenForms["Form1"];
-        //Form mainForm = Application.OpenForms[0];
-        //MessageBox.Show("mainForm: "+mainForm.ToString());
-        //Form1_Load();
-        //set_size();
         public Form1()
         {
-            //this.Size = new Size(658, 615);
             InitializeComponent();
-            //Form1_Load();
             set_size();
             signInPanel.Location = new Point(45, 36);
             appPanel.Location = new Point(45, 36);
@@ -41,26 +30,10 @@ namespace _4990ExampleApp
             set_initial_status();
             listPanel.Add(signInPanel);
             listPanel.Add(appPanel);
-            //listPanel.Add(newAccountPanel);
         }
-        private void Form1_Load()
-        {
-            //mainForm = Form1.ActiveForm;
-            //mainForm = Application.OpenForms["Form1"];
-        }
-        //public void set_size()
-        //{
-        //    //mainForm = Application.OpenForms[0];
-        //    Form mainForm = Form1.ActiveForm;
-        //    MessageBox.Show("Val of mainForm: " + mainForm.ToString());
-        //    //mainForm.Size = new Size(658, 615);
-        //    mainForm.MaximizeBox = false;
-        //    mainForm.Size = new Size(658, 615);
-        //}
         public void set_initial_status()
         {
-            MessageBox.Show("This app has been updated via github AGAIN");
-            bool Testing = true;
+            bool Testing = false;
             goodOrBad.Checked = false;
             if (Testing)
             {
@@ -73,23 +46,11 @@ namespace _4990ExampleApp
                 passwordTextBox.Text = String.Empty;
             }
             signInPanel.BringToFront();
-            //signInPanel.Show();
-            //appPanel.Hide();
             appPanel.SendToBack();
-            //newAccountPanel.Visible = false;
             newAccountPanel.SendToBack();
             userInfoGrid.DataSource = String.Empty;
         }
 
-        private void label1_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void listBox1_SelectedIndexChanged(object sender, EventArgs e)
-        {
-
-        }
         private bool bare_minimum_validation_lol(string name,string password)
         {
             bool nameOk = check_string(name);
@@ -347,33 +308,17 @@ namespace _4990ExampleApp
                 return false;
             }
         }
-        private void button2_Click(object sender, EventArgs e)
-        {
-            if (all_fields_filled() == false)
-                return;
-            if((newAccount_passwords_match(newAccountPassword.Text, newAccountPasswordConfirm.Text) == false) |
-                (new_user_name(newAccountName.Text) == false))
-            {
-                return;
-            }
-            else
-            {
-                MessageBox.Show("New User will be added to db...\nOnce i write that function.");
-                set_initial_status();
-                return;
-            }
-        }
+
         private bool all_fields_filled()
         {
             List<object> newAccountItems = new List<object>();
             newAccountItems.Add(newFirstName);
             newAccountItems.Add(newLastName);
-            //newAccountItems.Add(newSsn);
             newAccountItems.Add(newAccountName);
             newAccountItems.Add(newAccountPassword);
             newAccountItems.Add(newAccountPasswordConfirm);
             string enteredSsn = newSsn.ToString();
-            for (int i = 0;i<enteredSsn.Length;i++)
+            for (int i = 0; i < enteredSsn.Length; i++)
             {
                 if (enteredSsn[i] == '_')
                 {
@@ -392,7 +337,6 @@ namespace _4990ExampleApp
             return true;
         }
 
-        
         private void create_new_account()
         {
             return;
@@ -400,35 +344,6 @@ namespace _4990ExampleApp
         private void returnToMainFromNewAccount_Click(object sender, EventArgs e)
         {
             set_initial_status();
-        }
-        private void label12_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void label10_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void textBox2_TextChanged(object sender, EventArgs e)
-        {
-
-        }
-
-        private void label11_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void textBox1_TextChanged(object sender, EventArgs e)
-        {
-
-        }
-
-        private void textBox3_TextChanged(object sender, EventArgs e)
-        {
-
         }
 
         private void newAccountPanel_Paint(object sender, PaintEventArgs e)
