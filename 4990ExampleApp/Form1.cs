@@ -33,7 +33,7 @@ namespace _4990ExampleApp
         }
         public void set_initial_status()
         {
-            bool Testing = true;
+            bool Testing = false;
             goodOrBad.Checked = false;
             if (Testing)
             {
