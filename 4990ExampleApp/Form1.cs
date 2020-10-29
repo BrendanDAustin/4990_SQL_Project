@@ -33,12 +33,18 @@ namespace _4990ExampleApp
         }
         public void set_initial_status()
         {
-            bool Testing = false;
+            bool Testing = true;
             goodOrBad.Checked = false;
             if (Testing)
             {
-                userNameTextBox.Text = "BrendanAustin";
-                passwordTextBox.Text = "BrendansLazyPassword";
+                newAccountName.Text = "HannerHider";
+                newAccountPassword.Text = "HannasPassword";
+                newAccountPasswordConfirm.Text = "HannasPasword";
+                newFirstName.Text = "Hannah";
+                newLastName.Text = "Hidy";
+                newSsn.Text = "122-56-4585";
+                //userNameTextBox.Text = "BrendanAustin";
+                //passwordTextBox.Text = "BrendansLazyPassword";
             }
             else
             {
@@ -288,7 +294,9 @@ namespace _4990ExampleApp
                 conn.Close();
             }
             DataRow[] foundRows;
-            foundRows = users.Tables["Users"].Select("UserName = " + newName);
+            //foundRows = users.Tables["Users"].Select("UserName = " + newName);
+            string selectExpression = String.Format("UserName = '{0}'", newName);
+            foundRows = users.Tables[0].Select(selectExpression);
             MessageBox.Show("Found rows:\n" + foundRows.ToString());
             if(foundRows.Count()>0)
             {
@@ -338,9 +346,21 @@ namespace _4990ExampleApp
             return true;
         }
 
-        private void create_new_account()
+        private void create_new_account(string user, string pw, string firstName, string lastName, string SSN)
         {
-            return;
+            string dbPath = System.IO.Path.Combine(
+             AppDomain.CurrentDomain.BaseDirectory,
+             "ExampleDB.accdb");
+
+            string strDsn = String.Format(
+                       "Provider=Microsoft.ACE.OLEDB.12.0; Data Source={0}",
+                       dbPath);
+            string strSql = String.Format("INSERT INTO Users (UserName, [Password], FirstName, LastName, SSN) VALUES ('{0}', '{1}', '{2}', '{3}', '{4}')", user, pw, firstName, lastName, SSN);
+            OleDbConnection conn = new OleDbConnection(strDsn);
+            OleDbCommand command = new OleDbCommand(strSql, conn);
+            conn.Open();
+            command.ExecuteNonQuery();
+            conn.Close();
         }
         private void returnToMainFromNewAccount_Click(object sender, EventArgs e)
         {
@@ -371,7 +391,7 @@ namespace _4990ExampleApp
             }
             else
             {
-                MessageBox.Show("New User will be added to db...\nOnce i write that function.");
+                create_new_account(newAccountName.Text, newAccountPassword.Text, newFirstName.Text, newLastName.Text, newSsn.Text);
                 set_initial_status();
                 return;
             }
