@@ -297,7 +297,6 @@ namespace _4990ExampleApp
             //foundRows = users.Tables["Users"].Select("UserName = " + newName);
             string selectExpression = String.Format("UserName = '{0}'", newName);
             foundRows = users.Tables[0].Select(selectExpression);
-            MessageBox.Show("Found rows:\n" + foundRows.ToString());
             if(foundRows.Count()>0)
             {
                 MessageBox.Show("Username (" + newName + ") is already taken.\nPlease select a different name");
