@@ -8,13 +8,15 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Data.OleDb;
-
+//using queryMethods;
+//using _4990ExampleApp.queryMethods;
 namespace _4990ExampleApp
 {
     public partial class Form1 : Form
     {
         List < Panel > listPanel = new List < Panel > ();
         int Index;
+        bool showQueryChecked = false;
         private BindingSource dfSource = new BindingSource();
         public void set_size()
         {
@@ -33,8 +35,8 @@ namespace _4990ExampleApp
         }
         public void set_initial_status()
         {
-            bool Testing = false;
-            goodOrBad.Checked = false;
+            bool Testing = true;
+            inputValidation.Checked = false;
             if (Testing)
             {
                 newAccountName.Text = "HannerHider";
@@ -44,7 +46,13 @@ namespace _4990ExampleApp
                 newLastName.Text = "Hidy";
                 newSsn.Text = "122-56-4585";
                 //userNameTextBox.Text = "BrendanAustin";
-                //passwordTextBox.Text = "BrendansLazyPassword";
+                //userNameTextBox.Text = "' union select table_schema from information_schema.tables union select '1";
+                //userNameTextBox.Text = "1' OR IN (SELECT MSysObjects.Name as table_name FROM MSysObjects WHERE (((Left([Name],1))<>\"~\") AND ((Left([Name],4))<>\"MSys\") AND ((MSysObjects.Type) In (1,4,6))) order by MSysObjects.Name) OR '1";
+                //userNameTextBox.Text = "' union select table_schema from DB_NAME().tables union select '1";
+                passwordTextBox.Text = "";
+                userNameTextBox.Text = "";
+                //passwordTextBox.Text = "' UNION SELECT NULL,DB_NAME(1),NULL--";
+                
             }
             else
             {
@@ -55,9 +63,20 @@ namespace _4990ExampleApp
             appPanel.SendToBack();
             newAccountPanel.SendToBack();
             userInfoGrid.DataSource = String.Empty;
+            queryDisplayLabel.Text = String.Empty;
+            showQuery.Checked = false;
             //MessageBox.Show("Updated... Heres a box, boy");
         }
-
+        private string get_str_dsn()
+        {
+            string dbPath = System.IO.Path.Combine(
+            AppDomain.CurrentDomain.BaseDirectory,
+            "ExampleDB.accdb");
+            string strDsn = String.Format(
+                       "Provider=Microsoft.ACE.OLEDB.12.0; Data Source={0}",
+                       dbPath);
+            return strDsn;
+        }
         private bool bare_minimum_validation_lol(string name,string password)
         {
             bool nameOk = check_string(name);
@@ -85,6 +104,7 @@ namespace _4990ExampleApp
         }
         private void get_data(string userName)
         {
+            /*
             string dbPath = System.IO.Path.Combine(
             AppDomain.CurrentDomain.BaseDirectory,
             "ExampleDB.accdb");
@@ -92,10 +112,12 @@ namespace _4990ExampleApp
             string strDsn = String.Format(
                        "Provider=Microsoft.ACE.OLEDB.12.0; Data Source={0}",
                        dbPath);
+            */
+            string strDsn = get_str_dsn();
             DataSet df = new DataSet();
             //string dbPath = "C:\\Users\\Brend\\Desktop\\Fall 2020\\CyberSecurity\\Project\\ExampleDB.accdb";
             string strSql = "SELECT * FROM Users WHERE UserName = '" + userName + "'";// AND Password = "+password;
-            MessageBox.Show("SQL String Used for displaying personal data:\n" + strSql);
+            //MessageBox.Show("SQL String Used for displaying personal data:\n" + strSql);
             //string strDsn = "Provider=Microsoft.ACE.OLEDB.12.0;Data Source = " + dbPath;
             OleDbConnection myConn = new OleDbConnection(strDsn);
             OleDbDataAdapter myCmd = new OleDbDataAdapter(strSql, myConn);
@@ -114,9 +136,57 @@ namespace _4990ExampleApp
                 userInfoGrid.DataSource = "No Info For you buddayyy";
             //return df;
         }
+        private bool signin_with_reader()
+        {
+            string userName = userNameTextBox.Text;
+            string password = passwordTextBox.Text;
+            /*
+            string dbPath = System.IO.Path.Combine(
+            AppDomain.CurrentDomain.BaseDirectory,
+            "ExampleDB_UPDATED.accdb");
 
+            string strDsn = String.Format(
+                       "Provider=Microsoft.ACE.OLEDB.12.0; Data Source={0}",
+                       dbPath);
+                       */
+            string strDsn = get_str_dsn();
+            string strSql = "SELECT UserName FROM Users WHERE Users.[UserName] = '" + userName + "' AND Users.[Password] ='" + password + "'";
+            MessageBox.Show("Entered SQL command:\n" + strSql);
+            List<string> found_user = new List<string>();
+            string found_user_string = "";
+            using (OleDbConnection conn = new OleDbConnection(strDsn))
+            {
+                OleDbCommand command = new OleDbCommand(strSql, conn);
+                conn.Open();
+                try
+                {
+                    OleDbDataReader reader = command.ExecuteReader();
+                    while (reader.Read())
+                    {
+                        found_user.Add(reader[0].ToString());
+                        found_user_string += reader[0].ToString() + "\n";
+                    }
+                    reader.Close();
+                    if (!found_user.Contains(userName))
+                    {
+                        MessageBox.Show("Login failed for User: " + found_user_string);
+                        return false;
+                    }
+                    else
+                        return true;
+                }
+                catch(System.Data.OleDb.OleDbException ex)
+                {
+                    MessageBox.Show("ERROR:\n" + ex.Message);
+                    return false;
+                }
+
+            }
+
+        }
         private bool auth_user_bad_way(string userName, string password)
         {
+            /*
             string dbPath = System.IO.Path.Combine(
             AppDomain.CurrentDomain.BaseDirectory,
             "ExampleDB.accdb");
@@ -124,26 +194,166 @@ namespace _4990ExampleApp
             string strDsn = String.Format(
                        "Provider=Microsoft.ACE.OLEDB.12.0; Data Source={0}",
                        dbPath);
+            */
+            string strDsn = get_str_dsn();
             DataSet users = new DataSet();
             //string dbPath = "C:\\Users\\Brend\\Desktop\\Fall 2020\\CyberSecurity\\Project\\ExampleDB.accdb";
             string strSql = "SELECT * FROM Users WHERE Users.[UserName] = '" + userName + "' AND Users.[Password] ='" + password+"'";
             //string strDsn = "Provider=Microsoft.ACE.OLEDB.12.0;Data Source =" + dbPath;
             OleDbConnection conn = new OleDbConnection(strDsn);
             conn.Open();
-
+            MessageBox.Show("Entered SqlString:\n" + strSql);
             using (OleDbCommand command = new OleDbCommand(strSql, conn))
             using (OleDbDataAdapter adapter = new OleDbDataAdapter(command))
             {
-                adapter.Fill(users);
-                conn.Close();
+                try
+                {
+                    adapter.Fill(users);
+                    conn.Close();
+                    string query_results = "Query Results:\n";
+                    foreach (DataRow row in users.Tables[0].Rows)
+                    {
+                        query_results += row[1].ToString() + "\n";
+                    }
+                    MessageBox.Show(query_results);
+                    if (users.Tables[0].Rows.Count == 0)
+                        return false;
+                    else
+                        return true;
+                }
+                catch(System.Data.OleDb.OleDbException ex)
+                {
+                    MessageBox.Show(ex.Message);
+                    return false;
+                }
             }
-            MessageBox.Show("SQL Select string constructed from user input:\n" + strSql);
+            //MessageBox.Show("SQL Select string constructed from user input:\n" + strSql);
+            //MessageBox.Show("Failed to login as " + users.Tables[0]);
+            //string query_results = users.Tables[0].Columns[0].ToString();
+
+            /*
+            string query_results = "Query Results:\n";
+            foreach(DataRow row in users.Tables[0].Rows)
+            {
+                query_results += row[1].ToString() + "\n";
+            }
+            MessageBox.Show(query_results);
             if (users.Tables[0].Rows.Count == 0)
                 return false;
             else
                 return true;
+            */
         }
-        
+        private bool auth_user_bad_way2(string userName, string password)
+        {
+            string strDsn = get_str_dsn();
+            DataSet retrieved_users = new DataSet();
+            DataSet retrieved_password = new DataSet();
+            //string dbPath = "C:\\Users\\Brend\\Desktop\\Fall 2020\\CyberSecurity\\Project\\ExampleDB.accdb";
+            string strSqlUser = "SELECT UserName FROM Users WHERE Users.[UserName] = '" + userName + "'";
+            string strSqlPw = "SELECT Password FROM Users WHERE Users.[Password] = '" + password + "'";
+            //string strDsn = "Provider=Microsoft.ACE.OLEDB.12.0;Data Source =" + dbPath;
+            //OleDbConnection conn = new OleDbConnection(strDsn);
+            //conn.Open();
+            string found_user = "";
+            string found_password = "";
+            using (OleDbConnection conn = new OleDbConnection(strDsn))
+            {
+                OleDbCommand user_command = new OleDbCommand(strSqlUser, conn);
+                conn.Open();
+                try
+                {
+                    OleDbDataReader reader = user_command.ExecuteReader();
+                    while (reader.Read())
+                    {
+                        //found_user.Add(reader[0].ToString());
+                        found_user += reader[0].ToString() + "\n";
+                    }
+                    reader.Close();
+                    if (!found_user.Contains(userName))
+                    {
+                        MessageBox.Show("Login failed for User: " + found_user);
+                        return false;
+                    }
+                    else
+                        return true;
+                }
+                catch (System.Data.OleDb.OleDbException ex)
+                {
+                    MessageBox.Show("ERROR:\n" + ex.Message);
+                    return false;
+                }
+                /*
+                OleDbCommand pw_command = new OleDbCommand(strSqlPw, conn);
+                conn.Open();
+                try
+                {
+                    OleDbDataReader pw_reader = pw_command.ExecuteReader();
+                    while (reader.Read())
+                    {
+                        //found_user.Add(reader[0].ToString());
+                        found_user += reader[0].ToString() + "\n";
+                    }
+                    reader.Close();
+                    if (!found_user.Contains(userName))
+                    {
+                        MessageBox.Show("Login failed for User: " + found_user);
+                        return false;
+                    }
+                    else
+                        return true;
+                }
+                catch (System.Data.OleDb.OleDbException ex)
+                {
+                    MessageBox.Show("ERROR:\n" + ex.Message);
+                    return false;
+                }
+                */
+            }
+            
+            /*
+            using (OleDbCommand command = new OleDbCommand(strSqlUser, conn))
+            using (OleDbDataAdapter adapter = new OleDbDataAdapter(command))
+            {
+                try
+                {
+                    adapter.Fill(users);
+                    conn.Close();
+                    string query_results = "Query Results:\n";
+                    foreach (DataRow row in users.Tables[0].Rows)
+                    {
+                        query_results += row[1].ToString() + "\n";
+                    }
+                    MessageBox.Show(query_results);
+                    if (users.Tables[0].Rows.Count == 0)
+                        return false;
+                    else
+                        return true;
+                }
+                catch (System.Data.OleDb.OleDbException ex)
+                {
+                    MessageBox.Show(ex.Message);
+                    return false;
+                }
+            }
+            */
+            //MessageBox.Show("SQL Select string constructed from user input:\n" + strSql);
+            //MessageBox.Show("Failed to login as " + users.Tables[0]);
+            //string query_results = users.Tables[0].Columns[0].ToString();
+
+            /*
+            string query_results = "Query Results:\n";
+            foreach(DataRow row in users.Tables[0].Rows)
+            {
+                query_results += row[1].ToString() + "\n";
+            }
+            MessageBox.Show(query_results);
+            if (users.Tables[0].Rows.Count == 0)
+                return false;
+            else
+                return true;
+            */
+        }
         private bool auth_user_good_way(string userName,string password)
         {
             string dbPath = System.IO.Path.Combine(
@@ -155,19 +365,20 @@ namespace _4990ExampleApp
                        dbPath);
             DataSet users = new DataSet();
             //string dbPath = "C:\\Users\\Brend\\Desktop\\Fall 2020\\CyberSecurity\\Project\\ExampleDB.accdb";
-            string strSql = "SELECT * FROM Users WHERE Users.[UserName] = '" + userName + "' AND Users.[Password] ='" + password + "'";
-            //string strDsn = "Provider=Microsoft.ACE.OLEDB.12.0;Data Source =C:\\Users\\Brend\\Desktop\\Fall 2020\\CyberSecurity\\Project\\ExampleDB.accdb";// + dbPath;
-            //using (OleDbConnection conn = new OleDbConnection(strDsn))
+            string strSql = "SELECT * FROM Users WHERE Users.[UserName] = ? AND Users.[Password] = ?";
             OleDbConnection conn = new OleDbConnection(strDsn);
             conn.Open();
             using (OleDbCommand command = new OleDbCommand(strSql, conn))
             using (OleDbDataAdapter adapter = new OleDbDataAdapter(command))
             {
-                //conn.Open();
+                var userNameParam = new OleDbParameter("@UserName", userName);
+                //MessageBox.Show("User Name Parameters:\n" + userNameParam.Value);
+                var passwordParam = new OleDbParameter("@Password", password);
+                command.Parameters.Add(userNameParam);
+                command.Parameters.Add(passwordParam);
                 adapter.Fill(users);
                 conn.Close();
             }
-
             if (users.Tables[0].Rows.Count == 0)
                 return false;
             //MessageBox.Show("Num Rows Returned:\n" + numRows.ToString());
@@ -188,16 +399,17 @@ namespace _4990ExampleApp
         }
         private void button1_Click(object sender, EventArgs e)
         {
-            if ((String.IsNullOrEmpty(userNameTextBox.Text)) | (String.IsNullOrEmpty(passwordTextBox.Text)))
+            //var buttons = techniqueSelectionGroup.Controls.OfType<RadioButton>()
+            //   .FirstOrDefault(n => n.Checked);
+            //MessageBox.Show("Group box buttons: " + buttons.ToString() + "\n Length of buttons: " + buttons.Size.ToString());
+            queryMethods query_method = new queryMethods(userNameTextBox.Text, passwordTextBox.Text, "ExampleDB", showQuery.Checked, ref queryDisplayLabel);
+            bool isGood = false;
+            if (noValidationCheckbox.Checked)
             {
-                MessageBox.Show("Uh Oh! You forgot to enter a field. Let's try that again.");
-            }
-            else
-            {
-
-                if (!goodOrBad.Checked)
-                {
+                isGood = query_method.no_validation();
+                /*
                     if (auth_user_bad_way(userNameTextBox.Text, passwordTextBox.Text))
+                    //if (signin_with_reader())
                     {
                         get_data(userNameTextBox.Text);
                         goto_nextPage();
@@ -207,28 +419,56 @@ namespace _4990ExampleApp
                         MessageBox.Show("You entered some bad information dude.");
                         set_initial_status();
                     }
+                    */
+            }
+            if(storedProcedure.Checked)
+            {
+                isGood = query_method.driver_parameterizations();
+                /*
+                if(auth_user_good_way(userNameTextBox.Text,passwordTextBox.Text))
+                {
+                    get_data(userNameTextBox.Text);
+                    goto_nextPage();
                 }
                 else
                 {
-                    //bool inputsGood = bare_minimum_validation_lol(userNameTextBox.Text, passwordTextBox.Text);
-                    if (bare_minimum_validation_lol(userNameTextBox.Text,passwordTextBox.Text))
-                    {
-                        get_data(userNameTextBox.Text);
-                        goto_nextPage();
-                    }
-                    else
-                    {
-                        MessageBox.Show("You entered some bad information dude.");
-                        set_initial_status();
-                    }
+                    MessageBox.Show("You entered some bad information dude.");
+                    set_initial_status();
                 }
+                */
+            }
+            if(inputValidation.Checked)
+            {
+                isGood = query_method.character_validation();
+                /*
+                //bool inputsGood = bare_minimum_validation_lol(userNameTextBox.Text, passwordTextBox.Text);
+                if (bare_minimum_validation_lol(userNameTextBox.Text,passwordTextBox.Text))
+                {
+                    get_data(userNameTextBox.Text);
+                    goto_nextPage();
+                }
+                else
+                {
+                    MessageBox.Show("You entered some bad information dude.");
+                    set_initial_status();
+                }
+                */
+            }
+            if(isGood)
+            {
+                get_data(userNameTextBox.Text);
+                goto_nextPage();
+            }
+            else
+            {
+                set_initial_status();
             }
         }
 
         private void goodOrBad_CheckedChanged(object sender, EventArgs e)
         {
-            if (goodOrBad.Checked)
-                goodOrBad.Checked = false;
+            if (inputValidation.Checked)
+                inputValidation.Checked = false;
         }
 
         private void returnHomeButton_Click(object sender, EventArgs e)
@@ -276,6 +516,7 @@ namespace _4990ExampleApp
         }
         private bool new_user_name(string newName)
         {
+            /*
             string dbPath = System.IO.Path.Combine(
                         AppDomain.CurrentDomain.BaseDirectory,
                         "ExampleDB.accdb");
@@ -283,6 +524,8 @@ namespace _4990ExampleApp
             string strDsn = String.Format(
                        "Provider=Microsoft.ACE.OLEDB.12.0; Data Source={0}",
                        dbPath);
+            */
+            string strDsn = get_str_dsn();
             DataSet users = new DataSet();
             string strSql = "SELECT UserName FROM Users";// WHERE Users.[UserName] = '" + userName + "' AND Users.[Password] ='" + password + "'";
             OleDbConnection conn = new OleDbConnection(strDsn);
@@ -347,6 +590,7 @@ namespace _4990ExampleApp
 
         private void create_new_account(string user, string pw, string firstName, string lastName, string SSN)
         {
+            /*
             string dbPath = System.IO.Path.Combine(
              AppDomain.CurrentDomain.BaseDirectory,
              "ExampleDB.accdb");
@@ -354,6 +598,8 @@ namespace _4990ExampleApp
             string strDsn = String.Format(
                        "Provider=Microsoft.ACE.OLEDB.12.0; Data Source={0}",
                        dbPath);
+                       */
+            string strDsn = get_str_dsn();
             string strSql = String.Format("INSERT INTO Users (UserName, [Password], FirstName, LastName, SSN) VALUES ('{0}', '{1}', '{2}', '{3}', '{4}')", user, pw, firstName, lastName, SSN);
             OleDbConnection conn = new OleDbConnection(strDsn);
             OleDbCommand command = new OleDbCommand(strSql, conn);
@@ -393,6 +639,35 @@ namespace _4990ExampleApp
                 create_new_account(newAccountName.Text, newAccountPassword.Text, newFirstName.Text, newLastName.Text, newSsn.Text);
                 set_initial_status();
                 return;
+            }
+        }
+
+        private void groupBox1_Enter(object sender, EventArgs e)
+        {
+
+        }
+
+        private void radioButton1_CheckedChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void showQuery_CheckedChanged(object sender, EventArgs e)
+        {
+            showQueryChecked = showQuery.Checked;
+            //if (showQuery.Checked==true)
+            //    showQuery.Checked = false;
+            //if (showQuery.Checked == false)
+            //    showQuery.Checked = true;
+        }
+        private void showQuery_Click(object sender, EventArgs e)
+        {
+            if (showQuery.Checked && !showQueryChecked)
+                showQuery.Checked = false;
+            else
+            {
+                showQuery.Checked = true;
+                showQueryChecked = false;
             }
         }
     }

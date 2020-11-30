@@ -35,11 +35,13 @@
             this.label3 = new System.Windows.Forms.Label();
             this.userNameTextBox = new System.Windows.Forms.TextBox();
             this.passwordTextBox = new System.Windows.Forms.TextBox();
-            this.button1 = new System.Windows.Forms.Button();
+            this.signIn = new System.Windows.Forms.Button();
             this.signInPanel = new System.Windows.Forms.Panel();
+            this.techniqueSelectionGroup = new System.Windows.Forms.GroupBox();
+            this.storedProcedure = new System.Windows.Forms.RadioButton();
+            this.inputValidation = new System.Windows.Forms.RadioButton();
             this.label9 = new System.Windows.Forms.Label();
             this.button3 = new System.Windows.Forms.Button();
-            this.goodOrBad = new System.Windows.Forms.RadioButton();
             this.appPanel = new System.Windows.Forms.Panel();
             this.returnHomeButton = new System.Windows.Forms.Button();
             this.label6 = new System.Windows.Forms.Label();
@@ -61,7 +63,12 @@
             this.newAccountName = new System.Windows.Forms.TextBox();
             this.label5 = new System.Windows.Forms.Label();
             this.label7 = new System.Windows.Forms.Label();
+            this.noValidationCheckbox = new System.Windows.Forms.RadioButton();
+            this.label14 = new System.Windows.Forms.Label();
+            this.queryDisplayLabel = new System.Windows.Forms.Label();
+            this.showQuery = new System.Windows.Forms.CheckBox();
             this.signInPanel.SuspendLayout();
+            this.techniqueSelectionGroup.SuspendLayout();
             this.appPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.userInfoGrid)).BeginInit();
             this.newAccountPanel.SuspendLayout();
@@ -76,7 +83,6 @@
             this.label1.Size = new System.Drawing.Size(68, 24);
             this.label1.TabIndex = 0;
             this.label1.Text = "Sign In";
-            //this.label1.Click += new System.EventHandler(this.label1_Click);
             // 
             // label2
             // 
@@ -110,22 +116,25 @@
             this.passwordTextBox.Size = new System.Drawing.Size(100, 20);
             this.passwordTextBox.TabIndex = 4;
             // 
-            // button1
+            // signIn
             // 
-            this.button1.Location = new System.Drawing.Point(264, 233);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(75, 23);
-            this.button1.TabIndex = 5;
-            this.button1.Text = "Sign In";
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
+            this.signIn.Location = new System.Drawing.Point(264, 233);
+            this.signIn.Name = "signIn";
+            this.signIn.Size = new System.Drawing.Size(75, 23);
+            this.signIn.TabIndex = 5;
+            this.signIn.Text = "Sign In";
+            this.signIn.UseVisualStyleBackColor = true;
+            this.signIn.Click += new System.EventHandler(this.button1_Click);
             // 
             // signInPanel
             // 
+            this.signInPanel.Controls.Add(this.showQuery);
+            this.signInPanel.Controls.Add(this.queryDisplayLabel);
+            this.signInPanel.Controls.Add(this.label14);
+            this.signInPanel.Controls.Add(this.techniqueSelectionGroup);
             this.signInPanel.Controls.Add(this.label9);
             this.signInPanel.Controls.Add(this.button3);
-            this.signInPanel.Controls.Add(this.goodOrBad);
-            this.signInPanel.Controls.Add(this.button1);
+            this.signInPanel.Controls.Add(this.signIn);
             this.signInPanel.Controls.Add(this.passwordTextBox);
             this.signInPanel.Controls.Add(this.label3);
             this.signInPanel.Controls.Add(this.userNameTextBox);
@@ -136,6 +145,41 @@
             this.signInPanel.Size = new System.Drawing.Size(573, 503);
             this.signInPanel.TabIndex = 2;
             this.signInPanel.Paint += new System.Windows.Forms.PaintEventHandler(this.signInPanel_Paint);
+            // 
+            // techniqueSelectionGroup
+            // 
+            this.techniqueSelectionGroup.Controls.Add(this.noValidationCheckbox);
+            this.techniqueSelectionGroup.Controls.Add(this.storedProcedure);
+            this.techniqueSelectionGroup.Controls.Add(this.inputValidation);
+            this.techniqueSelectionGroup.Location = new System.Drawing.Point(370, 27);
+            this.techniqueSelectionGroup.Name = "techniqueSelectionGroup";
+            this.techniqueSelectionGroup.Size = new System.Drawing.Size(171, 99);
+            this.techniqueSelectionGroup.TabIndex = 9;
+            this.techniqueSelectionGroup.TabStop = false;
+            this.techniqueSelectionGroup.Text = "Secure Programming Technique";
+            this.techniqueSelectionGroup.Enter += new System.EventHandler(this.groupBox1_Enter);
+            // 
+            // storedProcedure
+            // 
+            this.storedProcedure.AutoSize = true;
+            this.storedProcedure.Location = new System.Drawing.Point(0, 76);
+            this.storedProcedure.Name = "storedProcedure";
+            this.storedProcedure.Size = new System.Drawing.Size(162, 17);
+            this.storedProcedure.TabIndex = 7;
+            this.storedProcedure.Text = "DB Driver Stored Procedures";
+            this.storedProcedure.UseVisualStyleBackColor = true;
+            this.storedProcedure.CheckedChanged += new System.EventHandler(this.radioButton1_CheckedChanged);
+            // 
+            // inputValidation
+            // 
+            this.inputValidation.AutoSize = true;
+            this.inputValidation.Location = new System.Drawing.Point(0, 53);
+            this.inputValidation.Name = "inputValidation";
+            this.inputValidation.Size = new System.Drawing.Size(98, 17);
+            this.inputValidation.TabIndex = 6;
+            this.inputValidation.Text = "Input Validation";
+            this.inputValidation.UseVisualStyleBackColor = true;
+            this.inputValidation.CheckedChanged += new System.EventHandler(this.goodOrBad_CheckedChanged_1);
             // 
             // label9
             // 
@@ -155,17 +199,6 @@
             this.button3.Text = "Create New Account";
             this.button3.UseVisualStyleBackColor = true;
             this.button3.Click += new System.EventHandler(this.button3_Click);
-            // 
-            // goodOrBad
-            // 
-            this.goodOrBad.AutoSize = true;
-            this.goodOrBad.Location = new System.Drawing.Point(398, 48);
-            this.goodOrBad.Name = "goodOrBad";
-            this.goodOrBad.Size = new System.Drawing.Size(98, 17);
-            this.goodOrBad.TabIndex = 6;
-            this.goodOrBad.Text = "Input Validation";
-            this.goodOrBad.UseVisualStyleBackColor = true;
-            this.goodOrBad.CheckedChanged += new System.EventHandler(this.goodOrBad_CheckedChanged_1);
             // 
             // appPanel
             // 
@@ -365,6 +398,47 @@
             this.label7.TabIndex = 17;
             this.label7.Text = "Create New Account";
             // 
+            // noValidationCheckbox
+            // 
+            this.noValidationCheckbox.AutoSize = true;
+            this.noValidationCheckbox.Checked = true;
+            this.noValidationCheckbox.Location = new System.Drawing.Point(0, 33);
+            this.noValidationCheckbox.Name = "noValidationCheckbox";
+            this.noValidationCheckbox.Size = new System.Drawing.Size(51, 17);
+            this.noValidationCheckbox.TabIndex = 8;
+            this.noValidationCheckbox.TabStop = true;
+            this.noValidationCheckbox.Text = "None";
+            this.noValidationCheckbox.UseVisualStyleBackColor = true;
+            // 
+            // label14
+            // 
+            this.label14.AutoSize = true;
+            this.label14.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label14.Location = new System.Drawing.Point(3, 438);
+            this.label14.Name = "label14";
+            this.label14.Size = new System.Drawing.Size(116, 13);
+            this.label14.TabIndex = 11;
+            this.label14.Text = "Constructed Query:";
+            // 
+            // queryDisplayLabel
+            // 
+            this.queryDisplayLabel.AutoSize = true;
+            this.queryDisplayLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.queryDisplayLabel.Location = new System.Drawing.Point(3, 461);
+            this.queryDisplayLabel.Name = "queryDisplayLabel";
+            this.queryDisplayLabel.Size = new System.Drawing.Size(0, 13);
+            this.queryDisplayLabel.TabIndex = 12;
+            // 
+            // showQuery
+            // 
+            this.showQuery.AutoSize = true;
+            this.showQuery.Location = new System.Drawing.Point(6, 418);
+            this.showQuery.Name = "showQuery";
+            this.showQuery.Size = new System.Drawing.Size(187, 17);
+            this.showQuery.TabIndex = 13;
+            this.showQuery.Text = "Show Constructed SQL Command";
+            this.showQuery.UseVisualStyleBackColor = true;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -377,6 +451,8 @@
             this.Text = "Form1";
             this.signInPanel.ResumeLayout(false);
             this.signInPanel.PerformLayout();
+            this.techniqueSelectionGroup.ResumeLayout(false);
+            this.techniqueSelectionGroup.PerformLayout();
             this.appPanel.ResumeLayout(false);
             this.appPanel.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.userInfoGrid)).EndInit();
@@ -392,13 +468,13 @@
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.TextBox userNameTextBox;
         private System.Windows.Forms.TextBox passwordTextBox;
-        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.Button signIn;
         private System.Windows.Forms.Panel signInPanel;
         private System.Windows.Forms.Panel appPanel;
         private System.Windows.Forms.Button returnHomeButton;
         private System.Windows.Forms.DataGridView userInfoGrid;
         private System.Windows.Forms.Label label6;
-        private System.Windows.Forms.RadioButton goodOrBad;
+        private System.Windows.Forms.RadioButton inputValidation;
     private System.Windows.Forms.Label label9;
     private System.Windows.Forms.Button button3;
     private System.Windows.Forms.Panel newAccountPanel;
@@ -418,6 +494,12 @@
         private System.Windows.Forms.TextBox newAccountName;
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.Label label7;
+        private System.Windows.Forms.GroupBox techniqueSelectionGroup;
+        private System.Windows.Forms.RadioButton storedProcedure;
+        private System.Windows.Forms.RadioButton noValidationCheckbox;
+        private System.Windows.Forms.Label queryDisplayLabel;
+        private System.Windows.Forms.Label label14;
+        private System.Windows.Forms.CheckBox showQuery;
     }
 }
 
