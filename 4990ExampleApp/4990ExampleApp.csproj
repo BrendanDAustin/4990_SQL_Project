@@ -16,7 +16,7 @@
     <PublishUrl>C:\Users\Brend\Desktop\Fall 2020\CyberSecurity\Project\</PublishUrl>
     <Install>true</Install>
     <InstallFrom>Disk</InstallFrom>
-    <UpdateEnabled>true</UpdateEnabled>
+    <UpdateEnabled>false</UpdateEnabled>
     <UpdateMode>Foreground</UpdateMode>
     <UpdateInterval>7</UpdateInterval>
     <UpdateIntervalUnits>Days</UpdateIntervalUnits>
@@ -25,8 +25,7 @@
     <MapFileExtensions>true</MapFileExtensions>
     <UpdateUrl>https://drive.google.com/file/d/1uOTJePrI1D8xB941JT_uL_pcx2ENuTSO/view%3fusp=sharing/</UpdateUrl>
     <WebPage>publish.htm</WebPage>
-    <AutorunEnabled>true</AutorunEnabled>
-    <ApplicationRevision>15</ApplicationRevision>
+    <ApplicationRevision>17</ApplicationRevision>
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <PublishWizardCompleted>true</PublishWizardCompleted>
